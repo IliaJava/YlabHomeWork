@@ -1,5 +1,6 @@
 package org.example.repository;
 
+import org.example.model.Role;
 import org.example.model.User;
 
 import java.util.ArrayList;
@@ -16,9 +17,9 @@ public class UserRepository {
         initializeDefaulUsers();
     }
 private void initializeDefaulUsers(){
-    users.put("admin", new User("admin", "admin123", User.Role.ADMIN));
-    users.put("manager", new User("manager", "manager123", User.Role.MANAGER));
-    users.put("viewer", new User("viewer", "viewer123", User.Role.VIEWER));
+    users.put("admin", new User("admin", "admin123", Role.ADMIN));
+    users.put("manager", new User("manager", "manager123", Role.MANAGER));
+    users.put("viewer", new User("viewer", "viewer123", Role.VIEWER));
 }
    public User getUserByUsername(String username){
        return users.get(username);

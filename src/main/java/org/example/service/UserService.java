@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.model.Role;
 import org.example.model.User;
 import org.example.repository.FileDataManager;
 import org.example.repository.UserRepository;
@@ -41,16 +42,16 @@ public class UserService {
         return currentUser != null;
     }
 
-    public boolean hasPermission(User.Role requiredRole) {
+    public boolean hasPermission(Role requiredRole) {
         if (currentUser == null) return false;
 
         // Иерархия прав: ADMIN > MANAGER > VIEWER
         switch (requiredRole) {
             case ADMIN:
-                return currentUser.getRole() == User.Role.ADMIN;
+                return currentUser.getRole() == Role.ADMIN;
             case MANAGER:
-                return currentUser.getRole() == User.Role.ADMIN ||
-                        currentUser.getRole() == User.Role.MANAGER;
+                return currentUser.getRole() == Role.ADMIN ||
+                        currentUser.getRole() == Role.MANAGER;
             case VIEWER:
                 return true;
             default:
@@ -61,8 +62,8 @@ public class UserService {
     /**
      * Добавление нового пользователя (только для администраторов)
      */
-    public boolean addUser(String username, String password, User.Role role) {
-        if (!hasPermission(User.Role.ADMIN)) {
+    public boolean addUser(String username, String password, Role role) {
+        if (!hasPermission(Role.ADMIN)) {
             return false;
         }
 
@@ -78,8 +79,8 @@ public class UserService {
     /**
      * Обновление пользователя (только для администраторов)
      */
-    public boolean updateUser(String username, String newPassword, User.Role newRole) {
-        if (!hasPermission(User.Role.ADMIN)) {
+    public boolean updateUser(String username, String newPassword, Role newRole) {
+        if (!hasPermission(Role.ADMIN)) {
             return false;
         }
 
@@ -107,7 +108,7 @@ public class UserService {
      * Удаление пользователя (только для администраторов)
      */
     public boolean deleteUser(String username) {
-        if (!hasPermission(User.Role.ADMIN)) {
+        if (!hasPermission(Role.ADMIN)) {
             return false;
         }
 
@@ -127,7 +128,7 @@ public class UserService {
      * Получение списка всех пользователей (только для администраторов)
      */
     public List<User> getAllUsers() {
-        if (!hasPermission(User.Role.ADMIN)) {
+        if (!hasPermission(Role.ADMIN)) {
             return new ArrayList<>();
         }
         return userRepository.getAllUsers();

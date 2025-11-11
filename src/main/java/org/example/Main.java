@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.model.Category;
 import org.example.model.Product;
+import org.example.model.Role;
 import org.example.model.User;
 import org.example.repository.FileDataManager;
 import org.example.repository.ProductRepository;
@@ -90,12 +91,12 @@ public class Main {
         System.out.println("2. Поиск товаров");
         System.out.println("3. Добавить товар");
 
-        if (userService.hasPermission(User.Role.MANAGER)) {
+        if (userService.hasPermission(Role.MANAGER)) {
             System.out.println("4. Редактировать товар");
             System.out.println("5. Удалить товар");
         }
 
-        if (userService.hasPermission(User.Role.ADMIN)) {
+        if (userService.hasPermission(Role.ADMIN)) {
             System.out.println("6. Управление пользователями");
             System.out.println("7. Показать метрики");
             System.out.println("8. Показать аудит");
@@ -117,42 +118,42 @@ public class Main {
                 searchProducts();
                 break;
             case 3:
-                if (userService.hasPermission(User.Role.MANAGER)) {
+                if (userService.hasPermission(Role.MANAGER)) {
                     addProduct();
                 } else {
                     System.out.println("Недостаточно прав для выполнения этой операции!");
                 }
                 break;
             case 4:
-                if (userService.hasPermission(User.Role.MANAGER)) {
+                if (userService.hasPermission(Role.MANAGER)) {
                     editProduct();
                 } else {
                     System.out.println("Недостаточно прав для выполнения этой операции!");
                 }
                 break;
             case 5:
-                if (userService.hasPermission(User.Role.MANAGER)) {
+                if (userService.hasPermission(Role.MANAGER)) {
                     deleteProduct();
                 } else {
                     System.out.println("Недостаточно прав для выполнения этой операции!");
                 }
                 break;
             case 6:
-                if (userService.hasPermission(User.Role.ADMIN)) {
+                if (userService.hasPermission(Role.ADMIN)) {
                     showUserManagementMenu();
                 } else {
                     System.out.println("Недостаточно прав для выполнения этой операции!");
                 }
                 break;
             case 7:
-                if (userService.hasPermission(User.Role.ADMIN)) {
+                if (userService.hasPermission(Role.ADMIN)) {
                     metricsService.printMetrics();
                 } else {
                     System.out.println("Недостаточно прав для выполнения этой операции!");
                 }
                 break;
             case 8:
-                if (userService.hasPermission(User.Role.ADMIN)) {
+                if (userService.hasPermission(Role.ADMIN)) {
                     auditService.printAuditLogs();
                 } else {
                     System.out.println("Недостаточно прав для выполнения этой операции!");
@@ -237,17 +238,17 @@ public class Main {
         System.out.print("Выберите роль (1-3): ");
 
         int roleChoice = readIntInput();
-        User.Role role;
+        Role role;
 
         switch (roleChoice) {
             case 1:
-                role = User.Role.ADMIN;
+                role = Role.ADMIN;
                 break;
             case 2:
-                role = User.Role.MANAGER;
+                role = Role.MANAGER;
                 break;
             case 3:
-                role = User.Role.VIEWER;
+                role = Role.VIEWER;
                 break;
             default:
                 System.out.println("Неверный выбор роли!");
@@ -288,17 +289,17 @@ public class Main {
         System.out.print("Выберите роль (0-3): ");
 
         int roleChoice = readIntInput();
-        User.Role newRole = null;
+        Role newRole = null;
 
         switch (roleChoice) {
             case 1:
-                newRole = User.Role.ADMIN;
+                newRole = Role.ADMIN;
                 break;
             case 2:
-                newRole = User.Role.MANAGER;
+                newRole = Role.MANAGER;
                 break;
             case 3:
-                newRole = User.Role.VIEWER;
+                newRole = Role.VIEWER;
                 break;
             case 0:
                 break;

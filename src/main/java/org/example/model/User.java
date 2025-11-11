@@ -1,6 +1,6 @@
 package org.example.model;
 
-import javax.management.relation.Role;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -9,10 +9,6 @@ public class User implements Serializable {
     private String username;
     private String password;
     private Role role;
-
-    public enum Role{
-        ADMIN, MANAGER, VIEWER
-    }
 
     public User(String username, String password, Role role) {
         this.username = username;
