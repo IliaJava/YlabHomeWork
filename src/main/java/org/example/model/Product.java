@@ -3,7 +3,10 @@ package org.example.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
+/**
+ * Модель товара с основными характеристиками
+ * Реализует Serializable для сохранения в файл
+ */
 public class Product implements Serializable {    //Для сохранения в файл
     private static final long serialVersionUID = 1L;
     private String id;
@@ -15,7 +18,16 @@ public class Product implements Serializable {    //Для сохранения 
     private int stockQuantity;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
+    /**
+     * Конструктор товара
+     * @param id уникальный идентификатор
+     * @param name название товара
+     * @param description описание товара
+     * @param price цена товара
+     * @param category категория товара
+     * @param brand бренд товара
+     * @param stockQuantity количество на складе
+     */
     public Product(String id, String name, String description, double price,
                    Category category, String brand, int stockQuantity) {
         this.id = id;

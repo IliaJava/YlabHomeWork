@@ -4,9 +4,7 @@ import org.example.model.Category;
 import org.example.model.Product;
 import org.example.model.Role;
 import org.example.model.User;
-import org.example.repository.FileDataManager;
-import org.example.repository.ProductRepository;
-import org.example.repository.UserRepository;
+import org.example.repository.*;
 import org.example.service.*;
 
 import java.util.List;
@@ -33,10 +31,13 @@ public class Main {
      * Инициализация всех компонентов системы
      */
     private void initialize() {
-        // Инициализация репозиториев
+
+        ProductDataManager productDataManager = new ProductFileManager();
+        UserDataManager userDataManager = new UserFileManager();
+        CategoryDataManager categoryDataManager = new CategoryManager();
+
         ProductRepository productRepository = new ProductRepository();
         UserRepository userRepository = new UserRepository();
-        FileDataManager fileDataManager = new FileDataManager();
 
         // Инициализация сервисов
         CacheService cacheService = new CacheService();
@@ -44,11 +45,11 @@ public class Main {
         auditService = new AuditService();
 
         productService = new ProductService(productRepository, cacheService,
-                metricsService, fileDataManager);
-        userService = new UserService(userRepository, fileDataManager);
+                metricsService, productDataManager);
+        userService = new UserService(userRepository, userDataManager);
 
         // Загрузка категорий
-        categories = fileDataManager.initializeCategories();
+        categories = categoryDataManager.initializeCategories();
         scanner = new Scanner(System.in);
 
         System.out.println("=== СЕРВИС КАТАЛОГА ТОВАРОВ ===");

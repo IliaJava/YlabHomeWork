@@ -2,7 +2,7 @@ package org.example.service;
 
 import org.example.model.Role;
 import org.example.model.User;
-import org.example.repository.FileDataManager;
+import org.example.repository.UserDataManager;
 import org.example.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -13,15 +13,25 @@ import java.util.concurrent.CompletableFuture;
  */
 public class UserService {
     private UserRepository userRepository;
-    private FileDataManager fileDataManager;
+    private UserDataManager userDataManager;
     private User currentUser;
 
-    public UserService(UserRepository userRepository, FileDataManager fileDataManager) {
+    /**
+     * Конструктор сервиса пользователей
+     * @param userRepository репозиторий пользователей
+     * @param userDataManager менеджер данных пользователей
+     */
+    public UserService(UserRepository userRepository, UserDataManager userDataManager) {
         this.userRepository = userRepository;
-        this.fileDataManager = fileDataManager;
+        this.userDataManager = userDataManager;
         loadUsersFromFile();
     }
-
+    /**
+     * Аутентификация пользователя
+     * @param username имя пользователя
+     * @param password пароль
+     * @return true если аутентификация успешна, false в противном случае
+     */
     public boolean login(String username, String password) {
         boolean authenticated = userRepository.authenticate(username, password);
         if (authenticated) {
@@ -29,7 +39,9 @@ public class UserService {
         }
         return authenticated;
     }
-
+    /**
+     * Выход пользователя из системы
+     */
     public void logout() {
         currentUser = null;
     }
@@ -41,7 +53,11 @@ public class UserService {
     public boolean isLoggedIn() {
         return currentUser != null;
     }
-
+    /**
+     * Проверка прав доступа пользователя
+     * @param requiredRole требуемая роль
+     * @return true если пользователь имеет достаточные права, false в противном случае
+     */
     public boolean hasPermission(Role requiredRole) {
         if (currentUser == null) return false;
 
@@ -61,6 +77,10 @@ public class UserService {
 
     /**
      * Добавление нового пользователя (только для администраторов)
+     * @param username имя пользователя
+     * @param password пароль
+     * @param role роль пользователя
+     * @return true если пользователь добавлен, false в противном случае
      */
     public boolean addUser(String username, String password, Role role) {
         if (!hasPermission(Role.ADMIN)) {
@@ -78,6 +98,10 @@ public class UserService {
 
     /**
      * Обновление пользователя (только для администраторов)
+     * @param username имя пользователя
+     * @param newPassword новый пароль (может быть null)
+     * @param newRole новая роль (может быть null)
+     * @return true если пользователь обновлен, false в противном случае
      */
     public boolean updateUser(String username, String newPassword, Role newRole) {
         if (!hasPermission(Role.ADMIN)) {
@@ -106,6 +130,8 @@ public class UserService {
 
     /**
      * Удаление пользователя (только для администраторов)
+     * @param username имя пользователя
+     * @return true если пользователь удален, false в противном случае
      */
     public boolean deleteUser(String username) {
         if (!hasPermission(Role.ADMIN)) {
@@ -126,6 +152,7 @@ public class UserService {
 
     /**
      * Получение списка всех пользователей (только для администраторов)
+     * @return список пользователей или пустой список если недостаточно прав
      */
     public List<User> getAllUsers() {
         if (!hasPermission(Role.ADMIN)) {
@@ -136,6 +163,8 @@ public class UserService {
 
     /**
      * Проверка существования пользователя
+     * @param username имя пользователя
+     * @return true если пользователь существует, false в противном случае
      */
     public boolean userExists(String username) {
         return userRepository.userExists(username);
@@ -145,9 +174,9 @@ public class UserService {
      * Загрузка пользователей из файла
      */
     private void loadUsersFromFile() {
-        List<User> users = fileDataManager.loadUsers();
+        List<User> users = userDataManager.loadUsers();
         if (!users.isEmpty()) {
-            // Очищаем стандартных пользователей и загружаем из файла
+
             userRepository = new UserRepository();
             for (User user : users) {
                 userRepository.addUser(user);
@@ -159,6 +188,6 @@ public class UserService {
      * Сохранение пользователей в файл
      */
     private void saveUsersToFile() {
-        fileDataManager.saveUsers(userRepository.getAllUsers());
+        userDataManager.saveUsers(userRepository.getAllUsers());
     }
 }

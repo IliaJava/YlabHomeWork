@@ -3,13 +3,21 @@ package org.example.model;
 
 import java.io.Serializable;
 import java.util.Objects;
-
+/**
+ * Модель пользователя системы
+ *
+ */
 public class User implements Serializable {
     private static final long serialVersionUID = 1l;
     private String username;
     private String password;
     private Role role;
-
+    /**
+     * Конструктор пользователя
+     * @param username имя пользователя
+     * @param password пароль
+     * @param role роль пользователя
+     */
     public User(String username, String password, Role role) {
         this.username = username;
         this.password = password;

@@ -8,16 +8,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+/**
+ * Репозиторий для управления товарами с базовой бизнес-логикой
+ */
 
 public class ProductRepository {
     private Map<String, Product> products;
     private Map<Category, List<Product>> productsByCategory;
+    /**
+     * Конструктор репозитория товаров
+     */
     public ProductRepository() {
         this.products = new HashMap<>();
         this.productsByCategory = new HashMap<>();
     }
     /**
      * Добавление товара с организацией по категориям
+     * @param product товар для добавления
      */
     public void addProduct(Product product) {
         products.put(product.getId(), product);
@@ -28,6 +35,8 @@ public class ProductRepository {
     }
     /**
      * Обновление товара с поддержанием целостности данных
+     * @param product товар для обновления
+     * @return true если обновление успешно, false если товар не найден
      */
     public boolean updateProduct(Product product) {
         if (products.containsKey(product.getId())) {
@@ -48,6 +57,8 @@ public class ProductRepository {
     }
     /**
      * Удаление товара из всех индексов
+     * @param productId идентификатор товара
+     * @return true если удаление успешно, false если товар не найден
      */
     public boolean deleteProduct(String productId) {
         Product product = products.get(productId);
@@ -79,6 +90,8 @@ public class ProductRepository {
 
     /**
      * Поиск товаров по категории (оптимизированный через предварительную индексацию)
+     * @param category категория для поиска
+     * @return список товаров в категории
      */
     public List<Product> getProductsByCategory(Category category) {
         return productsByCategory.getOrDefault(category, new ArrayList<>());
@@ -86,6 +99,8 @@ public class ProductRepository {
 
     /**
      * Поиск товаров по бренду
+     * @param brand бренд для поиска
+     * @return список товаров бренда
      */
     public List<Product> getProductsByBrand(String brand) {
         return products.values().stream()
@@ -94,6 +109,9 @@ public class ProductRepository {
     }
     /**
      * Фильтрация товаров по диапазону цен
+     * @param minPrice минимальная цена
+     * @param maxPrice максимальная цена
+     * @return список товаров в диапазоне цен
      */
     public List<Product> getProductsByPriceRange(double minPrice, double maxPrice) {
         return products.values().stream()
@@ -103,6 +121,8 @@ public class ProductRepository {
 
     /**
      * Поиск товаров по имени (с поддержкой частичного совпадения)
+     * @param name имя или часть имени для поиска
+     * @return список найденных товаров
      */
     public List<Product> searchProductsByName(String name) {
         String searchTerm = name.toLowerCase();
@@ -113,6 +133,12 @@ public class ProductRepository {
 
     /**
      * Комплексный поиск с несколькими критериями
+     * @param name название товара (может быть null)
+     * @param category категория товара (может быть null)
+     * @param brand бренд товара (может быть null)
+     * @param minPrice минимальная цена (может быть null)
+     * @param maxPrice максимальная цена (может быть null)
+     * @return список товаров, соответствующих критериям
      */
     public List<Product> searchProducts(String name, Category category,
                                         String brand, Double minPrice, Double maxPrice) {

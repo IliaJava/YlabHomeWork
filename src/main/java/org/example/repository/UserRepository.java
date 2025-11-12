@@ -8,10 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Репозиторий для управления пользователями
+ */
 public class UserRepository {
     private Map<String, User> users;
-
+    /**
+     * Конструктор репозитория пользователей
+     */
     public UserRepository() {
         this.users = new HashMap<>();
         initializeDefaulUsers();
@@ -24,6 +28,11 @@ private void initializeDefaulUsers(){
    public User getUserByUsername(String username){
        return users.get(username);
    }
+    /**
+     * Добавление нового пользователя
+     * @param user пользователь для добавления
+     * @return true если пользователь добавлен, false если пользователь уже существует
+     */
     public boolean addUser(User user){
     if(users.containsKey(user.getUsername())){
         return false;
@@ -31,6 +40,11 @@ private void initializeDefaulUsers(){
     users.put(user.getUsername(), user);
     return true;
     }
+    /**
+     * Обновление пользователя
+     * @param user пользователь для обновления
+     * @return true если пользователь обновлен, false если пользователь не найден
+     */
     public boolean updateUser(User user){
         if (!users.containsKey(user.getUsername())){
             return false;
@@ -38,6 +52,11 @@ private void initializeDefaulUsers(){
         users.put(user.getUsername(), user);
         return true;
     }
+    /**
+     * Удаление пользователя
+     * @param username имя пользователя для удаления
+     * @return true если пользователь удален, false если пользователь не найден
+     */
     public boolean deleteUser(String username) {
         if (!users.containsKey(username)) {
             return false;
@@ -45,14 +64,28 @@ private void initializeDefaulUsers(){
         users.remove(username);
         return true;
     }
+    /**
+     * Получение списка всех пользователей
+     * @return список всех пользователей
+     */
     public List<User> getAllUsers(){
       return new ArrayList<>(users.values());
 }
-//++++++++++Аутинтификация
+    /**
+     * Аутентификация пользователя
+     * @param username имя пользователя
+     * @param password пароль
+     * @return true если аутентификация успешна, false в противном случае
+     */
     public boolean authenticate(String username, String password) {
         User user = users.get(username);
         return user != null && user.getPassword().equals(password);
     }
+    /**
+     * Проверка существования пользователя
+     * @param username имя пользователя
+     * @return true если пользователь существует, false в противном случае
+     */
     public boolean userExists(String username) {
         return users.containsKey(username);
     }

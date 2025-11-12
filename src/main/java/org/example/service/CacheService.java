@@ -14,7 +14,9 @@ private final int MAX_CACHE_SIZE = 100;
     private static class CacheEntry {
 Object data;
     long timestamp;
-
+        /**
+         * Конструктор сервиса кэширования
+         */
     CacheEntry(Object data) {
         this.data = data;
         this.timestamp = System.currentTimeMillis();
@@ -33,14 +35,13 @@ public CacheService() {
 }
     /**
      * Добавление данных в кэш
+     * @param key ключ для кэширования
+     * @param data данные для кэширования
      */
     public void put(String key, Object data) {
         cache.put(key, new CacheEntry(data));
     }
 
-    /**
-     * Получение данных из кэша
-     */
     @SuppressWarnings("unchecked")
     public <T> T get(String key) {
         CacheEntry entry = cache.get(key);
@@ -52,6 +53,7 @@ public CacheService() {
 
     /**
      * Удаление данных из кэша
+     * @param key ключ для удаления
      */
     public void remove(String key) {
         cache.remove(key);
@@ -65,6 +67,7 @@ public CacheService() {
 
     /**
      * Получение статистики кэша
+     * @return текущий размер кэша
      */
     public int getCacheSize() {
         return cache.size();
